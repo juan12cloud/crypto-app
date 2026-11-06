@@ -1,7 +1,10 @@
 import {useState, useEffect} from "react"
 const API_URL = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'
 
+
 import CoinCard from "./components/CoinCard"
+import FilterInput from "./components/FilterInput"
+
 
 const App = () => {
     const [coins, setCoins] = useState([])
@@ -12,7 +15,7 @@ const App = () => {
     
     // when app mounts
     useEffect(() => { 
-        fetch(`${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`)
+        fetch(${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false)
           .then((res) => {
             if(!res.ok) throw new Error('Fail to fetch data!')
             return res.json()
@@ -28,12 +31,22 @@ const App = () => {
           })
     }, [limit])
 
+
+    const filterCoins = coins.filter((coin) => {
+      return coin.name.toLowerCase().includes(filter.toLowerCase()) || coin.symbol.toLowerCase().includes(filter.toLowerCase())
+})
+
+
+    
     return(
         <div>
             <h1>Crypto App</h1>
             { loading && <p>Loading...</p>}
             { error && <div className="error">{error}</div>}
+                   <div className="top-control">
             <div className="controls">
+       
+                <FilterInput filter={filter} onFilterChange={setFilter}/>
               <label htmlFor="limit">Show: </label>
               <select value={limit} id="limit"
                 onChange={(e) => setLimit(Number(e.target.value))}
@@ -44,10 +57,11 @@ const App = () => {
                 <option value="50">50</option>
                 <option value="100">100</option>
               </select>
+              </div>
             </div>
             { !loading && !error && (
                 <main className="grid">
-                    { coins.map((coin) => (
+                    { filterCoins.map((coin) => (
                         <CoinCard coin={coin} key={coin.id}/>  
                     ))}
                 </main>
@@ -56,6 +70,9 @@ const App = () => {
     )
 
 
+
+
 }
+
 
 export default App
