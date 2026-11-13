@@ -1,10 +1,14 @@
 import {useState, useEffect} from "react"
 const API_URL = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'
 
+
 import HomePage from "./pages/home"
 import AboutPage from "./pages/about"
 import NotFoundPage from "./pages/not-found"
 import {Routes, Route} from 'react-router'
+import Header from './components/Header'
+
+
 
 
 const App = () => {
@@ -14,9 +18,10 @@ const App = () => {
     const [limit, setLimit] = useState(10)
     const [filter, setFilter] = useState('')
 
+
     // when app mounts
     useEffect(() => {
-        fetch(`${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`)
+        fetch(${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false)
           .then((res) => {
             if(!res.ok) throw new Error('Fail to fetch data!')
             return res.json()
@@ -33,8 +38,11 @@ const App = () => {
     }, [limit])
 
 
+
+
     return(
       <>
+      <Header />
       <Routes>
         <Route path='/' element={ <HomePage
           coins={coins}
@@ -47,12 +55,15 @@ const App = () => {
           />
         }/>
         <Route path='/about' element={<AboutPage />} />
-        <Route path='*' element={<NotFoundPage />}>
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
       </>
     )
 
 
+
+
 }
+
 
 export default App
